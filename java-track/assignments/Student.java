@@ -1,86 +1,80 @@
-
 public class Student {
 
 	private String name;
 	private int studentID;
+	private double gpa;
 	private int credits;
-	private double GPA;
 	
-	public Student(String firstName, String lastName, int studentID) {
+	public Student(String firstName, String lastName, int studentID){
 		this.name = firstName + " " + lastName;
 		this.studentID = studentID;
+		this.gpa = 0.0;
 		this.credits = 0;
-		this.GPA = 0.0;
 	}
 	
-	public Student(String firstName, String lastName, int studentID, int credits, double GPA) {
+	public Student(String firstName, String lastName, int studentID, double gpa, int credits){
 		this.name = firstName + " " + lastName;
 		this.studentID = studentID;
+		this.gpa = gpa;
 		this.credits = credits;
-		this.GPA = GPA;
 	}
-	
-	public String getName() {
+		
+	public String getName(){
 		return name;
 	}
 	
-	public void setName(String name) {
-		this.name = name;		
-	}
-
-	public int getStudentID() {
+	public int getStudentID(){
 		return studentID;
 	}
-	public int getCredits() {
-		return credits;
-	}
-	public double getGPA() {
-		return GPA;
+	
+	public double getGPA(){
+		return gpa;
 	}
 	
-	public String getClassStanding() {
-		
-		if (this.credits < 30) {
+	public int getCredits(){
+		return credits;
+	}
+	
+	public String getClassStanding(){
+		if(this.credits < 30){
 			return "Freshman";
-		} else if (this.credits < 60) {
+		}
+		else if(this.credits >= 30 && this.credits < 60){
 			return "Sophomore";
-		} else if (this.credits < 90) {
+		}
+		else if(this.credits >= 60 && this.credits < 90){
 			return "Junior";
-		} else {
+		}
+		else {
 			return "Senior";
 		}
 		
 	}
 	
-	public void submitGrade(double courseGrade, int courseCredits) {
-		
-		// compute new GPA
-		double qualityScore = courseGrade * courseCredits;
-		double qualitySubtotal = this.GPA * this.credits;
-		this.credits += courseCredits;
-		qualitySubtotal += qualityScore;
-		double unrounded = qualitySubtotal / this.credits;
-		
-		// round to 3 decimal places
-		this.GPA = (double) Math.round(unrounded * 1000.0) / 1000.0;
+	public void submitGrade(double grade, int credits){
+		double qualityScore = grade * credits;
+		double scoreSubtotal = this.gpa * this.credits;
+		this.credits += credits;
+		scoreSubtotal += qualityScore;
+		double newGPA = scoreSubtotal/this.credits;
+		this.gpa = (double) Math.round(newGPA * 1000.0) / 1000.0;
 	}
 	
-	public double computeTuition() {
+	public double computeTuition(){
 		int semesters = this.credits / 15;
 		int leftoverCredits = this.credits % 15;
 		return semesters * 20000.0 + leftoverCredits * 1333.33;
 	}
 	
-	public Student createLegacy(Student firstParent, Student secondParent) {
-		return new Student(
-				firstParent.getName(),
-				secondParent.getName(),
-				firstParent.getStudentID() + secondParent.getStudentID(),
-				Math.max(firstParent.getCredits(), secondParent.getCredits()),
-				(firstParent.getGPA() + secondParent.getGPA()) / 2);
+	public Student createLegacy(Student studentOne, Student studentTwo){
+		return new Student(studentOne.getName(), studentTwo.getName(), 
+				studentOne.getStudentID()+studentTwo.getStudentID(),
+				(studentOne.getGPA() + studentTwo.getGPA())/2,
+				Math.max(studentOne.getCredits(), studentTwo.getCredits()));
 	}
 	
-	public String toString() {
-		return this.name + "(" + this.studentID + ")";
+	public String toString(){
+		return this.getName() + "'s Student ID is " + this.getStudentID();
 	}
+	
 }
